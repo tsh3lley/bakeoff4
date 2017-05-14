@@ -51,7 +51,6 @@ void setup() {
 
 void draw() {
   int index = trialIndex;
-  Target t = targets.get(index);
   int curTime = millis();
   //uncomment line below to see if sensors are updating
   //println("light val: " + light +", cursor accel vals: " + cursorX +"/" + cursorY);
@@ -78,6 +77,9 @@ void draw() {
     text("User took " + nfc((finishTime-startTime)/1000f/trialCount, 1) + " sec per target", width/2, 150);
     return;
   }
+  
+  Target t = targets.get(index);
+  
   if (light>proxSensorThreshold) {
     
     if (curTime - 1000 > begTime){
