@@ -21,7 +21,8 @@ ArrayList<Target> targets = new ArrayList<Target>();
 int startTime = 0; // time starts when the first click is captured
 int finishTime = 0; //records the time of the final click
 int begTime = 0;
-int coloredI = 1;
+int coloredI = 0;
+boolean heldDown = false;
 boolean userDone = false;
 int countDownTimerWait = 0;
 
@@ -50,12 +51,16 @@ void setup() {
 
 void draw() {
   int index = trialIndex;
+  Target t = targets.get(index);
   int curTime = millis();
   //uncomment line below to see if sensors are updating
   //println("light val: " + light +", cursor accel vals: " + cursorX +"/" + cursorY);
   background(80); //background is light grey
   noStroke(); //no stroke
-
+  
+  if (light<proxSensorThreshold){
+    heldDown = true; 
+  }
   countDownTimerWait--;
 
   if (startTime == 0)
@@ -75,21 +80,35 @@ void draw() {
   }
   if (curTime - 1000 > begTime){
     coloredI ++;
-    if (coloredI > 4){
-      coloredI = 1;
+    if (coloredI > 3){
+      coloredI = 0;
     }
     begTime = curTime;
   }
   for (int i=0; i<4; i++){
+    if (targets.get(index).target==i){
+      fill(255, 0, 0);
+      ellipse(300, i*150+100, 120, 100);
+    }
     if (coloredI == i)
       fill(0, 255, 0);
     else
       fill(180, 180, 180);
     ellipse(300, i*150+100, 100, 100);
   }
-
-
-
+  //if light is greater than threshold and heldDown = true, check if colored I equals t.target
+  if (light>proxSensorThreshold && heldDown == true){
+    text("letgo",90,90);
+    if (coloredI == t.target){
+      //next trial
+      text("Next Trial",170,170);
+    } else { 
+      text("Prev Trial",170,170);
+      //previous trial
+    }
+    heldDown = false;
+  }
+  
   if (light>proxSensorThreshold)
     fill(180, 0, 0);
   else
