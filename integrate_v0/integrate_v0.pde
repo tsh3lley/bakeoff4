@@ -78,7 +78,7 @@ void draw() {
     text("User took " + nfc((finishTime-startTime)/1000f/trialCount, 1) + " sec per target", width/2, 150);
     return;
   }
-  if (curTime - 1000 > begTime){
+  if (curTime - 750 > begTime){
     coloredI ++;
     if (coloredI > 3){
       coloredI = 0;
